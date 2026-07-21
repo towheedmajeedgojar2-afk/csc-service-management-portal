@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -9,6 +10,13 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
+app.use(
+  cors({
+    origin: "https://csc-service-management-portal-le5tyht7o-towheed-csc.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 
 // Set up larger limit for base64 file uploads (PDFs, images)
 app.use(express.json({ limit: "50mb" }));
