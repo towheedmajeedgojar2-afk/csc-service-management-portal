@@ -1,0 +1,6 @@
+{
+  "name": "CSC Service Management Portal",
+  "description": "Complete online service application and tracking portal for Towheed Majeed Gojar CSC, Uttersoo, Jammu & Kashmir.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
