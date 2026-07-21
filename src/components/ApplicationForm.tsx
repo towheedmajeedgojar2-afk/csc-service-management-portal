@@ -197,7 +197,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     };
 
     try {
-      const response = await fetch("https://csc-service-management-portal.onrender.com/api/applications", {
+      const response = await fetch("https://csc-service-management-portal.onrender.com/api/applications",  {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
