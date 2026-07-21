@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_URL } from "../config";
 // FORCE VERCEL REBUILD
 import { J_K_SERVICES, J_K_DISTRICTS, ServiceDefinition } from "../types";
 import { User, Users, Landmark, FileText, Upload, AlertCircle, CheckCircle, ArrowLeft, ArrowRight, Trash2 } from "lucide-react";
@@ -197,7 +198,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
     };
 
     try {
-      const response = await fetch("https://csc-service-management-portal.onrender.com/api/applications",  {
+      const response = await fetch(`${API_URL}/api/applications`,  {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
