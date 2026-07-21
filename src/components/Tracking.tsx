@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_URL } from "../config";
 import { Search, MapPin, Eye, FileText, CheckCircle2, AlertTriangle, Upload, ChevronRight, Copy, Check, ShieldCheck, Download } from "lucide-react";
 
 interface TrackingProps {
@@ -30,7 +31,7 @@ export const Tracking: React.FC<TrackingProps> = ({ initialAppId = "" }) => {
     setUploadSuccess(false);
 
     try {
-      const response = await fetch(`/api/applications/${appId.trim()}`);
+      const response = await fetch(`${API_URL}/api/applications/${appId.trim()}`);
       if (!response.ok) {
         const errData = await response.json();
         throw new Error(errData.error || "Application not found");
@@ -70,7 +71,7 @@ export const Tracking: React.FC<TrackingProps> = ({ initialAppId = "" }) => {
     const reader = new FileReader();
     reader.onloadend = async () => {
       try {
-        const response = await fetch(`/api/applications/${application.id}/upload-missing`, {
+        const response = await fetch(`${API_URL}/api/applications/${application.id}/upload-missing`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { API_URL } from "../config";
 import { AdminUser, Application } from "../types";
 import { 
   Lock, Landmark, Users, TrendingUp, CheckCircle, Clock, FileSpreadsheet, 
@@ -48,7 +49,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
     setIsLoggingIn(true);
 
     try {
-      const response = await fetch("/api/auth/login", {
+      const response = await fetch(`${API_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ username, password }),
@@ -78,7 +79,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
     try {
       // Fetch Applications
-      const appRes = await fetch("/api/admin/applications", {
+      const appRes = await fetch(`${API_URL}/api/admin/applications`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (appRes.ok) {
@@ -87,7 +88,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
       }
 
       // Fetch Stats
-      const statRes = await fetch("/api/admin/stats", {
+      const statRes = await fetch(`${API_URL}/api/admin/stats`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (statRes.ok) {
@@ -123,7 +124,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
 
     setIsUpdatingApp(true);
     try {
-      const response = await fetch(`/api/admin/applications/${selectedApp.id}`, {
+      const response = await fetch(`${API_URL}/api/admin/applications/${selectedApp.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -157,7 +158,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   // Trigger JSON Backup
   const handleDownloadBackup = async () => {
     try {
-      const response = await fetch("/api/admin/backup", {
+      const response = await fetch(`${API_URL}/api/admin/backup`, {
         headers: { "Authorization": `Bearer ${token}` }
       });
       if (!response.ok) throw new Error("Backup failed");

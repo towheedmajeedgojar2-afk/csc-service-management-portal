@@ -1,0 +1,1 @@
+export const API_URL = "https://csc-service-management-portal.onrender.com";

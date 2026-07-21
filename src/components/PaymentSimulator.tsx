@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { API_URL } from "../config";
 import { CreditCard, CheckCircle, Smartphone, AlertCircle, Copy, Check, Printer } from "lucide-react";
 
 interface PaymentSimulatorProps {
@@ -47,7 +48,7 @@ export const PaymentSimulator: React.FC<PaymentSimulatorProps> = ({
 
       const txId = `UPI${Math.floor(1000000000 + Math.random() * 9000000000)}`;
 
-      const response = await fetch(`/api/applications/${application.id}/pay`, {
+      const response = await fetch(`${API_URL}/api/applications/${application.id}/pay`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
