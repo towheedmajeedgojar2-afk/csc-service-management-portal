@@ -121,9 +121,7 @@ if (result.success) {
 
 const razorpay = new window.Razorpay(options);
 razorpay.open();
-      } else {
-        alert("Server error confirming payment. Please retry.");
-      }
+     
     } catch (err) {
       console.error(err);
       alert("Error processing payment. Check connectivity.");
