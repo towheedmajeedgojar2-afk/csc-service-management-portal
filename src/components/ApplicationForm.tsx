@@ -209,12 +209,38 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
       }
 
       const result = await response.json();
-      if (result.success) {
-        console.log("FORM SUCCESS DATA:", result.application);
-        onSubmitSuccess(result.application);
-      } else {
-        setValidationErrors(["Could not submit. Please try again."]);
-      }
+     if (result.success) {
+  console.log("FORM SUCCESS DATA:", result.application);
+
+  const options = {
+    key: 'rzp_test_TGQ5XFbTvxxrSl',
+    amount: activeService.fee * 100,
+    currency: 'INR',
+    name: 'Towheed Majeed Gojar CSC',
+    description: activeService.name,
+
+    handler: function (response: any) {
+      alert('Payment Successful!');
+      onSubmitSuccess(result.application);
+    },
+
+    prefill: {
+      name: fullName,
+      email: email,
+      contact: cleanMobile,
+    },
+
+    theme: {
+      color: '#1e3a8a',
+    },
+  };
+
+  const rzp = new (window as any).Razorpay(options);
+  rzp.open();
+
+} else {
+  setValidationErrors(["Could not submit. Please try again."]);
+}
     } catch (err) {
       console.error(err);
       setValidationErrors(["Network error during submission. Check your connectivity."]);
