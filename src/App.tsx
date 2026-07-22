@@ -75,6 +75,7 @@ export default function App() {
             serviceId={selectedServiceId}
             onBack={() => setCurrentTab("services")}
             onSubmitSuccess={(app) => {
+              console.log("Application Received:", app);
               setAppToPay(app);
               setCurrentTab("pay");
             }}

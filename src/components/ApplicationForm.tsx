@@ -210,6 +210,7 @@ export const ApplicationForm: React.FC<ApplicationFormProps> = ({
 
       const result = await response.json();
       if (result.success) {
+        console.log("FORM SUCCESS DATA:", result.application);
         onSubmitSuccess(result.application);
       } else {
         setValidationErrors(["Could not submit. Please try again."]);

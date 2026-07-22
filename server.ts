@@ -1,5 +1,7 @@
+import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
+import Razorpay from "razorpay";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
@@ -7,8 +9,13 @@ import { createServer as createViteServer } from "vite";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
+dotenv.config();
+console.log("RAZORPAY_KEY_ID:", process.env.RAZORPAY_KEY_ID);
 const app = express();
+const razorpay = new Razorpay({
+  key_id: process.env.RAZORPAY_KEY_ID!,
+  key_secret: process.env.RAZORPAY_KEY_SECRET!,
+});
 const PORT = 3000;
 app.use(
   cors({
@@ -320,6 +327,24 @@ function writeDb(data) {
 // ----------------------
 
 // 1. Submit Application (creates a temporary/pending payment application)
+app.post("/api/create-order", async (req, res) => {
+  try {
+    const { amount } = req.body;
+
+    const order = await razorpay.orders.create({
+      amount: amount * 100,
+      currency: "INR",
+      receipt: "receipt_" + Date.now(),
+    });
+
+    res.json(order);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: "Order creation failed",
+    });
+  }
+});
 app.post("/api/applications", (req, res) => {
   const { serviceType, serviceName, amount, personalDetails, familyDetails, bankDetails, documents } = req.body;
 

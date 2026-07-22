@@ -1,7 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { API_URL } from "../config";
 import { CreditCard, CheckCircle, Smartphone, AlertCircle, Copy, Check, Printer } from "lucide-react";
-
+declare global {
+  interface Window {
+    Razorpay: any;
+  }
+}
 interface PaymentSimulatorProps {
   application: any;
   onPaymentSuccess: (updatedApp: any) => void;
@@ -9,10 +13,20 @@ interface PaymentSimulatorProps {
 }
 
 export const PaymentSimulator: React.FC<PaymentSimulatorProps> = ({
+  
   application,
   onPaymentSuccess,
   onCancel,
-}) => {
+}) => {useEffect(() => {
+  const script = document.createElement("script");
+  script.src = "https://checkout.razorpay.com/v1/checkout.js";
+  script.async = true;
+  document.body.appendChild(script);
+
+  return () => {
+    document.body.removeChild(script);
+  };
+}, []);
   const [paymentMethod, setPaymentMethod] = useState<"upi" | "card" | "netbanking">("upi");
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
@@ -44,11 +58,36 @@ export const PaymentSimulator: React.FC<PaymentSimulatorProps> = ({
 
     try {
       // Simulate bank delay
-      await new Promise((resolve) => setTimeout(resolve, 1800));
+      const orderResponse = await fetch(`${API_URL}/api/create-order`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    amount: application.amount,
+  }),
+});
 
-      const txId = `UPI${Math.floor(1000000000 + Math.random() * 9000000000)}`;
+const order = await orderResponse.json();
 
-      const response = await fetch(`${API_URL}/api/applications/${application.id}/pay`, {
+console.log("Razorpay Order:", order);
+const options = {
+  key: "rzp_test_TGQ5XFbTvxxrSl",
+  amount: order.amount,
+  currency: order.currency,
+  name: "CSC Service Portal",
+  description: application.serviceName,
+  order_id: order.id,
+
+  handler: async function (response: any) {
+    alert("Razorpay Handler Called");
+    console.log("Payment Success:", response);
+    const paymentId = response.razorpay_payment_id;
+  const orderId = response.razorpay_order_id;
+  const signature = response.razorpay_signature;
+await new Promise((resolve) => setTimeout(resolve, 1800));
+
+     const txId = paymentId;
+
+      const payresponse = await fetch(`${API_URL}/api/applications/${application.id}/pay`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -57,15 +96,31 @@ export const PaymentSimulator: React.FC<PaymentSimulatorProps> = ({
           amount: application.amount,
         }),
       });
+      const result = await payresponse.json();
 
-      if (!response.ok) {
-        throw new Error("Payment registration failed");
-      }
+console.log("Payment Save Result:", result);
 
-      const result = await response.json();
-      if (result.success) {
-        setUpdatedApplication(result.application);
-        setPaymentSuccess(true);
+if (result.success) {
+  setUpdatedApplication(result.application);
+  setPaymentSuccess(true);
+}
+  console.log("Payment ID:", paymentId);
+  console.log("Order ID:", orderId);
+  console.log("Signature:", signature);
+  },
+
+  prefill: {
+    name: application.personalDetails.fullName,
+    contact: application.personalDetails.mobile,
+  },
+
+  theme: {
+    color: "#1e1b4b",
+  },
+};
+
+const razorpay = new window.Razorpay(options);
+razorpay.open();
       } else {
         alert("Server error confirming payment. Please retry.");
       }

@@ -1,1 +1,1 @@
-export const API_URL = "https://csc-service-management-portal.onrender.com";
+export const API_URL = "http://localhost:3000";
