@@ -23,22 +23,38 @@ export default function App() {
   const [adminUser, setAdminUser] = useState<AdminUser | null>(null);
 
   useEffect(() => {
-    // 1. Check if returning admin session exists
-    const storedToken = localStorage.getItem("csc_admin_token");
-    const storedUser = localStorage.getItem("csc_admin_user");
-    if (storedToken && storedUser) {
-      setAdminToken(storedToken);
-      setAdminUser(JSON.parse(storedUser));
-    }
+  // 1. Check if returning admin session exists
+  const storedToken = localStorage.getItem("csc_admin_token");
+  const storedUser = localStorage.getItem("csc_admin_user");
+
+  if (storedToken && storedUser) {
+    setAdminToken(storedToken);
+    setAdminUser(JSON.parse(storedUser));
+  }
+
+  const params = new URLSearchParams(window.location.search);
+  const idParam = params.get("id");
+
+  if (idParam) {
+    setTrackId(idParam);
+    setCurrentTab("track");
+  }
+
+  // Footer policy navigation listener
+  const handleFooterNavigation = (event: Event) => {
+    const customEvent = event as CustomEvent<string>;
+    setCurrentTab(customEvent.detail);
+  };
+
+  window.addEventListener("navigate-tab", handleFooterNavigation);
+
+  return () => {
+    window.removeEventListener("navigate-tab", handleFooterNavigation);
+  };
+}, []);
 
     // 2. Parse query parameters for deep-linking (e.g., track updates)
-    const params = new URLSearchParams(window.location.search);
-    const idParam = params.get("id");
-    if (idParam) {
-      setTrackId(idParam);
-      setCurrentTab("track");
-    }
-  }, []);
+   
 
   const handleAdminLogout = () => {
     setAdminToken("");

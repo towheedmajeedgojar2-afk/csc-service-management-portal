@@ -233,6 +233,31 @@ export const Footer: React.FC = () => {
         </div>
       </div>
 
+      {/* Razorpay Required Policy Links */}
+      <div className="max-w-7xl mx-auto border-t border-slate-200 pt-6 mb-2">
+        <div className="flex flex-wrap justify-center gap-6 text-sm font-semibold text-slate-700">
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("navigate-tab", { detail: "privacy" }))}
+            className="hover:text-indigo-900 hover:underline transition-colors"
+          >
+            Privacy Policy
+          </button>
+
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("navigate-tab", { detail: "terms" }))}
+            className="hover:text-indigo-900 hover:underline transition-colors"
+          >
+            Terms & Conditions
+          </button>
+
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent("navigate-tab", { detail: "refund" }))}
+            className="hover:text-indigo-900 hover:underline transition-colors"
+          >
+            Refund Policy
+          </button>
+        </div>
+      </div>
       <div className="max-w-7xl mx-auto pt-6 border-t border-slate-200 text-center text-[10px] font-black uppercase tracking-widest text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
         <div>
           © 2026 Towheed Majeed Gojar CSC. All Rights Reserved.
