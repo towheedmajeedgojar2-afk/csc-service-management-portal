@@ -18,13 +18,15 @@ const razorpay = new Razorpay({
 });
 const PORT = 3000;
 app.use(
-  cors({
-    origin: "https://csc-service-management-portal-le5tyht7o-towheed-csc.vercel.app",
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
+ cors({
+  origin: [
+    "https://csc-service-management-portal.vercel.app",
+    "https://csc-service-management-portal-le5tyht7o-towheed-csc.vercel.app"
+  ],
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+})
 // Set up larger limit for base64 file uploads (PDFs, images)
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
