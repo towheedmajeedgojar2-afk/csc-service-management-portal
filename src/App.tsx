@@ -8,6 +8,9 @@ import { Tracking } from "./components/Tracking";
 import { AdminDashboard } from "./components/AdminDashboard";
 import { AdminUser } from "./types";
 import { Landmark } from "lucide-react";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+import Terms from "./pages/Terms";
+import RefundPolicy from "./pages/RefundPolicy";
 
 export default function App() {
   const [currentTab, setCurrentTab] = useState<string>("home");
@@ -94,6 +97,14 @@ export default function App() {
         );
       case "track":
         return <Tracking initialAppId={trackId} />;
+              case "privacy":
+        return <PrivacyPolicy />;
+
+      case "terms":
+        return <Terms />;
+
+      case "refund":
+        return <RefundPolicy />;
       case "admin":
         return (
           <AdminDashboard
