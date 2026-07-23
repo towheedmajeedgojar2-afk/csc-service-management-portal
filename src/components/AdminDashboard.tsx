@@ -18,6 +18,35 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
   onLoginSuccess,
   adminInfo,
 }) => {
+  // DELETE FUNCTION
+const handleDelete = async (id: string) => {
+  const confirmDelete = window.confirm(
+    'Kya aap is application ko permanently delete karna chahte hain?'
+  );
+
+  if (!confirmDelete) return;
+
+  try {
+    const response = await fetch(`${API_URL}/api/applications/${id}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (response.ok) {
+      alert('Application successfully delete ho gayi');
+
+      // Page refresh
+      window.location.reload();
+    } else {
+      alert('Delete failed');
+    }
+  } catch (error) {
+    console.error('Delete error:', error);
+    alert('Server error');
+  }
+};
   // Login State
   const [username, setUsername] = useState("admin");
   const [password, setPassword] = useState("cscadmin@uttersoo");
@@ -449,15 +478,26 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({
                         {app.status}
                       </span>
                     </td>
-                    <td className="p-4 text-right">
-                      <button
-                        onClick={() => openAppDetails(app)}
-                        className="px-3 py-1.5 bg-indigo-900 hover:bg-indigo-950 text-white font-black text-[9px] uppercase tracking-widest rounded transition-all inline-flex items-center gap-1 shadow-sm shadow-indigo-100"
-                      >
-                        <Eye className="w-3.5 h-3.5 text-orange-500" />
-                        <span>Inspect</span>
-                      </button>
-                    </td>
+                   <td className="p-4 text-right">
+  <div className="flex justify-end gap-2">
+
+    <button
+      onClick={() => openAppDetails(app)}
+      className="px-3 py-1.5 bg-indigo-900 hover:bg-indigo-950 text-white font-black text-[9px] uppercase tracking-widest rounded transition-all inline-flex items-center gap-1 shadow-sm shadow-indigo-100"
+    >
+      <Eye className="w-3.5 h-3.5 text-orange-500" />
+      <span>Inspect</span>
+    </button>
+
+    <button
+      onClick={() => handleDelete(app.id)}
+      className="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white font-black text-[9px] uppercase tracking-widest rounded transition-all inline-flex items-center gap-1 shadow-sm shadow-red-100"
+    >
+      <span>Delete</span>
+    </button>
+
+  </div>
+</td>
                   </tr>
                 ))}
 
